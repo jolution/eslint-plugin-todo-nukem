@@ -1,0 +1,32 @@
+{
+  "name": "eslint-plugin-todo-nukem",
+  "version": "0.1.0",
+  "author": "@jolution",
+  "description": "ESLint plugin for TODO NUKEM convention - https://github.com/jolution/todo-nukem",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint '**/*.{js,mjs,cjs}'",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jolution/eslint-plugin-todo-nukem.git"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "jolution",
+    "todo nukem",
+    "code comments"
+  ],
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1"
+  },
+  "license": "MIT"
+}
+
