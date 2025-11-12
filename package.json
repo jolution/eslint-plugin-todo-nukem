@@ -1,6 +1,6 @@
 {
   "name": "@jolution/eslint-plugin-todo-nukem",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "@jolution",
   "description": "ESLint plugin for TODO NUKEM convention - https://github.com/jolution/todo-nukem",
   "type": "module",
