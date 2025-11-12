@@ -14,12 +14,14 @@ ESLint plugin to enforce the [TODO NUKEM](https://github.com/jolution/todo-nukem
 
 In a nutshell: TODO NUKEM is a convention for classifying TODO comments in your code with emojis for priority, type, and context. This makes it easier to track and manage technical debt.
 
-**Learn more:** <https://github.com/jolution/todo-nukem>
+**Learn more:**  
+[GitHub Repository](https://github.com/jolution/eslint-plugin-todo-nukem)  
+[npm Package](https://www.npmjs.com/package/@jolution/eslint-plugin-todo-nukem)  
 
 ## Installation
 
 ```bash
-npm install --save-dev eslint-plugin-todo-nukem
+npm install --save-dev @jolution/eslint-plugin-todo-nukem
 ```
 
 ## Usage
