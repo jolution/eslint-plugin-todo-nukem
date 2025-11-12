@@ -1,0 +1,34 @@
+# Development files
+eslint.config.mjs
+.eslintrc*
+.prettierrc*
+tsconfig.json
+jest.config.js
+
+# Tests
+tests/
+*.test.js
+*.spec.js
+
+# Git
+.git
+.gitignore
+.github/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+coverage/
+.nyc_output/
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*

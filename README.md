@@ -27,7 +27,7 @@ npm install --save-dev eslint-plugin-todo-nukem
 Add to your Eslint-Config File (e.g `eslint.config.js`):
 
 ```javascript
-import todoNukem from 'eslint-plugin-todo-nukem';
+import todoNukem from '@jolution/eslint-plugin-todo-nukem';
 
 export default [
   {
