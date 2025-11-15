@@ -43,6 +43,17 @@ export default [
 ];
 ```
 
+## Best Practice: Use with VSCode Generator
+
+For the best experience, we recommend using this ESLint plugin together with the [TODO NUKEM VSCode Generator](https://github.com/jolution/todo-nukem-generator-vscode). The generator provides:
+
+- **Quick TODO creation** with keyboard shortcuts
+- **Emoji picker** for easy classification
+- **Automatic formatting** to match the convention
+- **Seamless integration** with this ESLint plugin for validation
+
+This combination ensures your TODOs are always correctly formatted from the start, while the ESLint plugin catches any manual edits that don't follow the convention.
+
 ## Classification Format
 
 The plugin enforces the TODO NUKEM format:
