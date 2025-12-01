@@ -12,7 +12,7 @@ ESLint plugin to enforce the [TODO NUKEM](https://github.com/jolution/todo-nukem
 
 ## About TODO NUKEM
 
-In a nutshell: TODO NUKEM is a convention for classifying TODO comments in your code with emojis for priority, type, and context. This makes it easier to track and manage technical debt.
+In a nutshell: TODO NUKEM is a convention for classifying TODO comments in your code with text-based tags for priority, type, and context. This makes it easier to track and manage technical debt.
 
 **Learn more:**  
 [GitHub Repository](https://github.com/jolution/eslint-plugin-todo-nukem)  
@@ -58,11 +58,23 @@ This combination ensures your TODOs are always correctly formatted from the star
 The plugin enforces the TODO NUKEM format:
 
 ```javascript
-// TODO: <prio> <type> <context> <description> [optional meta]
-// TODO: 🟩 ✨ 🎨 Refactor this component [🎯 Header] [📅 2025-Q1]
+// TODO: [priority] [type] [context] <description> [optional meta]
+// TODO: [low] [feature] [design] Refactor this component [scope: Header] [until: 2025-Q1]
 ```
 
-For the complete specification and all available emojis, see the [TODO NUKEM documentation](https://github.com/jolution/todo-nukem).
+**In source code:**
+
+```javascript
+// TODO: [low] [feature] [design] Refactor this component
+```
+
+**Visual display (with VSCode extension decorations):**
+
+```javascript
+// TODO: 🟩 ✨ 🎨 Refactor this component
+```
+
+For the complete specification and all available tags, see the [TODO NUKEM documentation](https://github.com/jolution/todo-nukem).
 
 ## ❤️ Support
 

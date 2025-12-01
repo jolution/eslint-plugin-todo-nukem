@@ -6,6 +6,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "test": "node test/todo-nukem-convention.test.mjs",
     "lint": "eslint '**/*.{js,mjs,cjs}'",
     "lint:fix": "npm run lint -- --fix"
   },

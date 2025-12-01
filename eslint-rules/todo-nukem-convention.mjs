@@ -1,26 +1,27 @@
 "use strict";
 
-const VALID_PRIOS = ["🟩", "🔶", "🔴"];
-const VALID_TYPES = ["✨", "🐛"];
-const VALID_CONTEXTS = ["🎨", "📝", "🧪", "🚀", "🌐", "🛡", "🔄", "🛠", "👀"];
+const VALID_PRIOS = ["low", "medium", "high"];
+const VALID_TYPES = ["feature", "fix"];
+const VALID_CONTEXTS = ["design", "doc", "test", "perf", "lang", "sec", "update", "optimize", "review"];
 const KEYWORDS = ["TODO", "FIXME", "HACK", "NOTE", "XXX", "OPTIMIZE"];
-const OPTIONAL_BLOCK_EMOJIS = ["💬", "🎯", "🎫", "📅", "👤", "✍️", "🔖", "📚", "🛑"];
+const OPTIONAL_META_KEYS = ["tbd", "scope", "ticket", "until", "assignee", "author", "version", "docs", "block-commit"];
 
 export default {
   meta: {
     type: "problem",
     docs: {
-      description: "enforce exactly one space and a valid priority emoji after TODO:",
+      description: "enforce TODO NUKEM convention with text-based tags in square brackets",
       recommended: false,
       url: "https://github.com/jolution/todo-nukem",
     },
     messages: {
       invalidFormat:
-        "TODO must be formatted as 'TODO:<space><prio><space><type><space><context><space>' where prio is one of 🟩, 🔶, 🔴, type is one of ✨, 🐛, and context is one of 🎨, 📝, 🧪, 🚀, 🌐, 🛡, 🔄, 🛠, 👀.",
+        "TODO must be formatted as 'TODO: [priority] [type] [context] message' where priority is [low], [medium], or [high], type is [feature] or [fix], and context is one of the defined contexts.",
       missingSpace: "Missing space after TODO:",
-      invalidSpaces: "Invalid spaces in TODO classification format.",
-      invalidEmojis: "Invalid emojis in TODO classification.",
-      invalidOptionalBlock: "Optional blocks must be formatted as '[<emoji><space><text>]' with spaces before and after (except at line end).",
+      invalidPriority: "Invalid priority. Must be [low], [medium], or [high].",
+      invalidType: "Invalid type. Must be [feature] or [fix].",
+      invalidContext: "Invalid context. Must be one of [design], [doc], [test], [perf], [lang], [sec], [update], [optimize], or [review].",
+      invalidMetaBlock: "Meta blocks must be formatted as '[key]' or '[key: value]' with proper spacing.",
     },
     schema: [],
   },
@@ -32,53 +33,52 @@ export default {
           const foundKeyword = KEYWORDS.find(kw => comment.value.includes(`${kw}:`));
           if (!foundKeyword) continue;
           
-          const regex = new RegExp(`${foundKeyword}: (.+)`);
+          const regex = new RegExp(`${foundKeyword}:\\s+(.+)`);
           const match = comment.value.match(regex);
           if (!match) {
             context.report({ loc: comment.loc, messageId: "missingSpace" });
             continue;
           }
           
-          const chars = [...match[1]];
-          const [prio, space1, type, space2, ctx, space3] = chars;
-
-          const hasValidSpaces = space1 === ' ' && space2 === ' ' && space3 === ' ';
-          if (!hasValidSpaces) {
-            context.report({ loc: comment.loc, messageId: "invalidSpaces" });
+          const content = match[1].trim();
+          
+          // Extract priority tag [low], [medium], or [high]
+          const prioMatch = content.match(/^\[(low|medium|high)\]/);
+          if (!prioMatch) {
+            context.report({ loc: comment.loc, messageId: "invalidPriority" });
+            continue;
+          }
+          
+          const afterPrio = content.substring(prioMatch[0].length).trim();
+          
+          // Extract type tag [feature] or [fix]
+          const typeMatch = afterPrio.match(/^\[(feature|fix)\]/);
+          if (!typeMatch) {
+            context.report({ loc: comment.loc, messageId: "invalidType" });
+            continue;
+          }
+          
+          const afterType = afterPrio.substring(typeMatch[0].length).trim();
+          
+          // Extract context tag
+          const contextMatch = afterType.match(/^\[(design|doc|test|perf|lang|sec|update|optimize|review)\]/);
+          if (!contextMatch) {
+            context.report({ loc: comment.loc, messageId: "invalidContext" });
             continue;
           }
 
-          const isValid = 
-            VALID_PRIOS.includes(prio) && 
-            VALID_TYPES.includes(type) &&
-            VALID_CONTEXTS.includes(ctx);
-
-          if (!isValid) {
-            context.report({ loc: comment.loc, messageId: "invalidEmojis" });
-            continue;
-          }
-
-          // Validate optional blocks
-          const fullText = match[1];
-          const optionalBlockPattern = /\[([^\]]+)\]/g;
+          // Validate optional meta blocks if present
+          const remainingContent = afterType.substring(contextMatch[0].length);
+          const metaBlockPattern = /\[(tbd|scope|ticket|until|assignee|author|version|docs|block-commit)(?::\s*([^\]]+))?\]/g;
           let blockMatch;
           
-          while ((blockMatch = optionalBlockPattern.exec(fullText)) !== null) {
-            const blockContent = blockMatch[1];
-            const blockStartIndex = blockMatch.index;
-            const blockEndIndex = blockStartIndex + blockMatch[0].length;
-            const blockChars = [...blockContent];
+          while ((blockMatch = metaBlockPattern.exec(remainingContent)) !== null) {
+            const key = blockMatch[1];
+            const value = blockMatch[2];
             
-            const hasSpaceBefore = blockStartIndex <= 6 || fullText[blockStartIndex - 1] === ' ';
-            const hasSpaceAfter = blockEndIndex >= fullText.length || fullText[blockEndIndex] === ' ';
-            const hasNoInternalSpaces = !blockContent.startsWith(' ') && !blockContent.endsWith(' ');
-            const hasValidFormat = 
-              OPTIONAL_BLOCK_EMOJIS.includes(blockChars[0]) && 
-              blockChars[1] === ' ' && 
-              blockChars.length > 2;
-            
-            if (!hasSpaceBefore || !hasSpaceAfter || !hasNoInternalSpaces || !hasValidFormat) {
-              context.report({ loc: comment.loc, messageId: "invalidOptionalBlock" });
+            // Validate that the key is valid
+            if (!OPTIONAL_META_KEYS.includes(key)) {
+              context.report({ loc: comment.loc, messageId: "invalidMetaBlock" });
               break;
             }
           }
